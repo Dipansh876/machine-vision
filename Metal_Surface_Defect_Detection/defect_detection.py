@@ -1,15 +1,21 @@
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
+from pathlib import Path
+import sys
 
 # -----------------------------
-# Read Image
+# Paths and Read Image
 # -----------------------------
-image = cv2.imread("dataset/img1.jpg")
+# Use paths relative to this script so the script can be run from any CWD
+BASE_DIR = Path(__file__).parent
+image_path = BASE_DIR / "dataset" / "img1.jpg"
+
+image = cv2.imread(str(image_path))
 
 if image is None:
-    print("Error: Image not found!")
-    exit()
+    print(f"Error: Image not found at {image_path}")
+    sys.exit(1)
 
 # Copy original image
 result = image.copy()
@@ -103,15 +109,17 @@ print("Total Defects Detected:", count)
 # -----------------------------
 # Save Results
 # -----------------------------
-cv2.imwrite("output_original.jpg", image)
-cv2.imwrite("output_gray.jpg", gray)
-cv2.imwrite("output_threshold.jpg", thresh)
-cv2.imwrite("output_edges.jpg", edges)
-cv2.imwrite("output_morphological.jpg", closing)
-cv2.imwrite("output_detected_defects.jpg", result)
+
+# Save outputs next to the script
+cv2.imwrite(str(BASE_DIR / "output_original.jpg"), image)
+cv2.imwrite(str(BASE_DIR / "output_gray.jpg"), gray)
+cv2.imwrite(str(BASE_DIR / "output_threshold.jpg"), thresh)
+cv2.imwrite(str(BASE_DIR / "output_edges.jpg"), edges)
+cv2.imwrite(str(BASE_DIR / "output_morphological.jpg"), closing)
+cv2.imwrite(str(BASE_DIR / "output_detected_defects.jpg"), result)
 
 print("\n✓ Results saved successfully!")
-print("\nOutput files created:")
+print("\nOutput files created in:", BASE_DIR)
 print("  - output_original.jpg")
 print("  - output_gray.jpg")
 print("  - output_threshold.jpg")
